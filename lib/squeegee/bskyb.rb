@@ -1,4 +1,7 @@
 module Squeegee
+
+  # British Sky Broadcasting (BSkyB) - Premium Television
+  #
   class BSkyB < Base
     LOGIN_URL = "https://skyid.sky.com/signin/accountmanagement"
     ACCOUNT_URL = "https://myaccount.sky.com/?action=viewbills"

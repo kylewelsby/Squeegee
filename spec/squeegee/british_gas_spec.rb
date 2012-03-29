@@ -1,38 +1,12 @@
 require 'spec_helper'
 
 describe Squeegee::BritishGas do
-  before do
-    unless ENV['british_gas_email'] || ENV['british_gas_password']
-      puts "NO ENV SET"
-      CONFIGS['british_gas'].each do |key,value|
-        ENV["british_gas_#{key}"] = value
-      end
-    end
-  end
-
   let(:mechanize) {mock('mechanize') }
   let(:node) {mock('node')}
   let(:form) {mock('form')}
   let(:button) {mock('button')}
 
   subject {Squeegee::BritishGas}
-
-
-  it "gets statements" do
-    VCR.use_cassette("british gas") do
-      british_gas = subject.new(
-        email: ENV['british_gas_email'],
-        password: ENV['british_gas_password']
-      )
-
-      british_gas.accounts.should be_an_instance_of Array
-      british_gas.accounts[0].due_at.should be_a Date
-      british_gas.accounts[0].due_at.should eql Date.parse('2011-12-29')
-      british_gas.accounts[0].amount.should be_a Integer
-      british_gas.accounts[0].amount.should eql 4445
-      british_gas.accounts[0].paid.should be_true
-    end
-  end
 
   context "classes" do
     before do

@@ -2,38 +2,12 @@
 require 'spec_helper'
 
 describe Squeegee::BSkyB do
-
-  before do
-    unless ENV['bskyb_username'] || ENV['bskyb_password']
-      puts "NO ENV SET"
-      CONFIGS['bskyb'].each do |key,value|
-        ENV["bskyb_#{key}"] = value
-      end
-    end
-  end
-
-
   let(:mechanize) {mock('mechanize') }
   let(:node) {mock('node')}
   let(:form) {mock('form')}
   let(:button) {mock('button')}
 
   subject{Squeegee::BSkyB}
-
-  it "gets the next bill date" do
-    VCR.use_cassette("bskyb") do
-      sky = subject.new({
-        username: ENV['bskyb_username'],
-        password: ENV['bskyb_password']
-      })
-
-      sky.due_at.should be_a Date
-      sky.due_at.should eql Date.parse('2012-03-13')
-      sky.amount.should be_a Integer
-      sky.amount.should eql 6258
-      sky.paid.should be_true
-    end
-  end
 
   context "Parameters" do
     before do

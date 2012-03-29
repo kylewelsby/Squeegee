@@ -4,17 +4,17 @@ require File.expand_path('../lib/squeegee/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Kyle Welsby", "Chuck Hardy"]
   gem.email         = ["app@britishruby.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{A collection of strategies to get bill dates and amounts
+  from a growing range of accounts.}
+  gem.summary       = %q{Returns bill dates and amounts form utility accounts.}
   gem.homepage      = "http://github.com/britruby/squeegee"
 
   gem.add_runtime_dependency 'mechanize'
+  gem.add_runtime_dependency 'logger'
 
+  gem.add_development_dependency "gem-release"
   gem.add_development_dependency "rspec"
-  gem.add_development_dependency "guard-rspec"
-  gem.add_development_dependency "spinach"
   gem.add_development_dependency "simplecov"
-  gem.add_development_dependency "vcr"
   gem.add_development_dependency "webmock"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

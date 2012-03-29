@@ -1,21 +1,32 @@
 module Squeegee
+
+  # BritishGas - Energy Supplier
+  # * can have more than one account.
+  #
   class BritishGas < Base
     HOST = "https://www.britishgas.co.uk"
     LOGIN_URL = "#{HOST}/Your_Account/Account_Details/"
     ACCOUNTS_URL = "#{HOST}/Account_History/Transactions_Account_List/"
     ACCOUNT_URL = "#{HOST}/Your_Account/Account_Transaction/"
+
+    # British Gas Account information Extration
+    # Example:
+    #     BritishGas::Account("8500", Mecanize.new)
+    #
     class Account < BritishGas
       attr_accessor :paid, :due_at, :amount
 
-      def initialize(account_id, agent)
+      def initialize(id, agent)
         @agent = agent
-        url = "#{Squeegee::BritishGas::ACCOUNT_URL}?accountnumber=#{account_id}"
+        url = "#{Squeegee::BritishGas::ACCOUNT_URL}?accountnumber=#{id}"
         page = get(url)
         table = page.search("div#divHistoryTable table tbody")
         rows = table.search("tr").map do |row|
           tds = row.search("td")
           _row = {
-            date: Date.parse(tds.first.inner_text.match(/\d{2}\s\w{3}\s\d{4}/)[0]),
+            date: Date.parse(
+              tds.first.inner_text.match(/\d{2}\s\w{3}\s\d{4}/)[0]
+            ),
             type: tds[1].inner_text.match(/[A-Za-z]{2,}\s?[A-Za-z]?{2,}/)[0],
             debit: tds[2].inner_text.to_f,
             credit: tds[3].inner_text.to_f,

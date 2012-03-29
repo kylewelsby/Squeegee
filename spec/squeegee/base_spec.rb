@@ -22,11 +22,14 @@ describe Squeegee::Base do
 
   describe "#get" do
     let(:mechanize) {mock('mechanize')}
+    let(:logger) {mock('logger')}
     it "should assign agent with a new instance of Mechanize" do
       Mechanize.should_receive(:new).and_return(mechanize)
 
       mechanize.should_receive(:user_agent=).with("Mozilla/5.0 (Squeegee)")
-      mechanize.should_receive(:force_default_encoding=).with("utf8")
+      mechanize.should_receive(:default_encoding=).with("utf8")
+      Logger.should_receive(:new).with('squeegee.log').and_return(logger)
+      mechanize.should_receive(:log=).with(logger)
       mechanize.should_receive(:get).with("http://google.com")
 
       subject.get("http://google.com")

@@ -1,6 +1,10 @@
-# Squeegee
+# Squeegee [![CI Build Status](https://secure.travis-ci.org/BritRuby/Squeegee.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/BritRuby/Squeegee.png?travis)][gemnasium]
 
-TODO: Write a gem description
+[travis]:http://travis-ci.org/BritRuby/Squeegee
+[gemnasium]:https://gemnasium.com/BritRuby/Squeegee
+
+Squeegee is a collection of login strategies to gather bill dates and amounts
+from customer accounts.
 
 ## Installation
 
