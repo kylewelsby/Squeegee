@@ -1,8 +1,10 @@
 require 'mechanize'
 require 'logger'
+require 'json'
 require 'squeegee/version'
 require 'squeegee/error'
 require 'squeegee/base'
+require 'squeegee/account'
 
 require 'squeegee/british_gas'
 require 'squeegee/bskyb'

@@ -106,11 +106,12 @@ describe Squeegee::OrangeUK do
           stub(:inner_text => "£25.50")
         ]
       )
-      orange = subject.new
-      orange.amount.should be_a Integer
-      orange.due_at.should be_a Date
-      orange.amount.should eql 2550
-      orange.due_at.should eql Date.parse('2012-05-15')
+      Squeegee::Account.should_receive(:new).
+        with(amount: 2550,
+             name: "Orange UK",
+             uid: "0a24082a818a019adfbe7d0b77d5448d",
+             due_at: Date.parse('2012-05-15'))
+      subject.new
     end
   end
 

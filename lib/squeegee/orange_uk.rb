@@ -12,10 +12,11 @@ module Squeegee
       password: 'PASSWORD'
     }
 
-    attr_accessor :paid, :amount, :due_at
+    attr_accessor :accounts, :account_id, :paid, :amount, :due_at
 
     def initialize(args = {})
       @keys = %w(username password)
+      @accounts = []
 
       params(args)
       @username = args.delete(:username)
@@ -33,6 +34,7 @@ module Squeegee
 
       form[FIELD[:username]] = @username
       form[FIELD[:password]] = @password
+
       page = @agent.submit(form, form.buttons.first)
 
       if page.uri == LOGIN_POST_URL && !page.search('.error').nil?
@@ -47,9 +49,15 @@ module Squeegee
 
       balance = page.search("#paymBalanceIncVAT").inner_text.gsub(/\.|,/,'').match(/\d{1,}/)
 
-      @due_at = Date.parse(last_bill.search("td")[0].inner_text)
-      @amount = last_bill.search('td')[2].inner_text.gsub(/\.|,/,'').match(/\d{1,}/)[0].to_i
+      due_at = Date.parse(last_bill.search("td")[0].inner_text)
+      amount = last_bill.search('td')[2].inner_text.gsub(/\.|,/,'').match(/\d{1,}/)[0].to_i
       #@paid = balance || balance[0].to_i >= 0
+      uid = Digest::MD5.hexdigest("OrangeUK#{@username}")
+
+      @accounts << Squeegee::Account.new(due_at: due_at,
+                                         name: "Orange UK",
+                                         uid: uid,
+                                         amount: amount)
     end
   end
 end

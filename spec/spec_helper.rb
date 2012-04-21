@@ -9,8 +9,6 @@ require 'rspec'
 require 'webmock'
 require 'squeegee'
 
-CONFIGS = YAML::load(File.open('spec/support/configs.yml'))
-
 RSpec.configure do |config|
   config.order = :rand
   config.color_enabled = true
