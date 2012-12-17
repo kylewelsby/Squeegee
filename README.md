@@ -1,7 +1,7 @@
-# Squeegee [![CI Build Status](https://secure.travis-ci.org/BritRuby/Squeegee.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/BritRuby/Squeegee.png?travis)][gemnasium]
+# Squeegee [![CI Build Status](https://secure.travis-ci.org/kylewelsby/Squeegee.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/kylewelsby/Squeegee.png?travis)][gemnasium]
 
-[travis]:http://travis-ci.org/BritRuby/Squeegee
-[gemnasium]:https://gemnasium.com/BritRuby/Squeegee
+[travis]:http://travis-ci.org/kylewelsby/Squeegee
+[gemnasium]:https://gemnasium.com/kylewelsby/Squeegee
 
 Squeegee is a collection of login strategies to gather bill dates and amounts
 from customer accounts.
