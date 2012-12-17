@@ -106,10 +106,12 @@ describe Squeegee::OrangeUK do
           stub(:inner_text => "£25.50")
         ]
       )
+      mechanize.stub(:at).with('#accountSelectorLilp').and_return({'value' => '1234'})
       Squeegee::Account.should_receive(:new).
         with(amount: 2550,
-             name: "Orange UK",
-             uid: "0a24082a818a019adfbe7d0b77d5448d",
+             name: "Orange UK (1234)",
+             uid: "06a0a787d8267fcb1a2887dc7baf4de1",
+             :number => 1234,
              due_at: Date.parse('2012-05-15'))
       subject.new
     end

@@ -6,11 +6,9 @@ describe Squeegee::BritishGas do
   let(:form) {mock('form')}
   let(:button) {mock('button')}
   let(:json) {[
-            {
-              'accountReferenceNumber' => 850046061940,
-              'Amount' => 70.00,
-              'Paymenttype' => ""
-            }
+            'activeProducts' => [
+              {'accountNumber' => 850046061940}
+            ]
           ].to_json}
 
   subject {Squeegee::BritishGas}
@@ -77,25 +75,26 @@ describe Squeegee::BritishGas do
         #Mechanize.any_instance.stub(get: mechanize.as_null_object)
         Mechanize.should_receive(:new).and_return(mechanize.as_null_object)
         mechanize.stub(form_with: form.as_null_object)
+        mechanize.stub(:at)
       end
       it "navigates to login URL" do
         mechanize.should_receive(:get).with(
-          "https://www.britishgas.co.uk/Your_Account/Account_Details/"
+          "https://www.britishgas.co.uk/Login/Login-Verify/"
         ).and_return(mechanize)
 
         subject.new({})
       end
 
-      it "finds by form action" do
+      it "finds by form name" do
         mechanize.should_receive(:form_with).with(
-          action: '/Online_User/Account_Summary/'
+          :name => 'userlogin'
         ).and_return(form.as_null_object)
 
         subject.new
       end
 
       it "fills in form inputs" do
-        form.should_receive(:[]=).with('userName', 'test@test.com')
+        form.should_receive(:[]=).with('emailAddress', 'test@test.com')
         form.should_receive(:[]=).with('password', 'superduper')
 
         subject.new(email: "test@test.com", password: "superduper")
@@ -137,7 +136,7 @@ describe Squeegee::BritishGas do
 
       it "finds paid bill" do
         mechanize.should_receive(:search).
-          with("div#divHistoryTable table tbody").
+          with("table.table-history tbody").
           and_return(node)
         node.should_receive(:search).
           with('tr').
@@ -156,7 +155,7 @@ describe Squeegee::BritishGas do
 
       it "finds debt" do
         mechanize.should_receive(:search).
-          with("div#divHistoryTable table tbody").
+          with("table.table-history tbody").
           and_return(node)
         node.should_receive(:search).
           with('tr').

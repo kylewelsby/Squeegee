@@ -67,6 +67,7 @@ module Squeegee
         amount: amount,
         due_at: due_at,
         paid: paid,
+        number: account_id,
         uid: uid
       )
 

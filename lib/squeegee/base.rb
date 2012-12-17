@@ -18,6 +18,7 @@ module Squeegee
       @agent.log = Logger.new 'squeegee.log'
       @agent.user_agent = "Mozilla/5.0 (Squeegee)"
       @agent.default_encoding = "utf8"
+      @agent.agent.http.ssl_version = :SSLv3
       @agent.get(url)
     end
   end

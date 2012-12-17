@@ -31,6 +31,11 @@ describe Squeegee::Base do
       Logger.should_receive(:new).with('squeegee.log').and_return(logger)
       mechanize.should_receive(:log=).with(logger)
       mechanize.should_receive(:get).with("http://google.com")
+      agent = stub(:agent)
+      mechanize.should_receive(:agent).and_return(agent)
+      http = stub(:http)
+      agent.should_receive(:http).and_return(http)
+      http.should_receive(:ssl_version=).with(:SSLv3)
 
       subject.get("http://google.com")
     end

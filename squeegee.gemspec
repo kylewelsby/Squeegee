@@ -2,12 +2,12 @@
 require File.expand_path('../lib/squeegee/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Kyle Welsby", "Chuck Hardy"]
-  gem.email         = ["app@britishruby.com"]
+  gem.authors       = ["Kyle Welsby"]
+  gem.email         = ["kyle@mekyle.com"]
   gem.description   = %q{A collection of strategies to get bill dates and amounts
   from a growing range of accounts.}
   gem.summary       = %q{Returns bill dates and amounts form utility accounts.}
-  gem.homepage      = "http://github.com/britruby/squeegee"
+  gem.homepage      = "http://github.com/kylewelsby/squeegee"
 
   gem.add_runtime_dependency 'mechanize'
   gem.add_runtime_dependency 'logger'

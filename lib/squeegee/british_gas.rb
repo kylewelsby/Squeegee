@@ -5,14 +5,14 @@ module Squeegee
   #
   class BritishGas < Base
     HOST = "https://www.britishgas.co.uk"
-    LOGIN_URL = "#{HOST}/Your_Account/Account_Details/"
-    ACCOUNTS_URL = "#{HOST}/AccountSummary/getAccountDetailsForSummary/"
-    ACCOUNT_URL = "#{HOST}/Your_Account/Account_Transaction/"
+    LOGIN_URL = "#{HOST}/Login/Login-Verify/"
+    ACCOUNTS_URL = "#{HOST}/apps/britishgas/components/GetAccountDetails/GET.servlet"
+    ACCOUNT_URL = "#{HOST}/YourAccount/PaymentHistory"
 
     attr_accessor :accounts
 
     FIELD = {
-      email: "userName",
+      email: "emailAddress",
       password: "password"
     }
 
@@ -32,35 +32,34 @@ module Squeegee
 
     def authenticate!
       page = get(LOGIN_URL)
-      form = page.form_with(action: '/Online_User/Account_Summary/')
+      form = page.form_with(name: 'userlogin')
 
       form[FIELD[:email]] = @email
       form[FIELD[:password]] = @password
-
       page = @agent.submit(form, form.buttons.first)
-      #raise Error::Unauthorized, "Account details could be wrong" if page.at('.error')
+      raise Error::Unauthorized, "Account details could be wrong" if page.at('.error')
     end
 
     def get_accounts
       page = get(ACCOUNTS_URL)
-      accounts = JSON.parse(page.body)
+      accounts = JSON.parse(page.body).first
       #account_ids = page.search("table#tableSelectAccount td > strong").collect {|row| row.content.to_i}
-      accounts.each do |account|
-        response = get_account(account['accountReferenceNumber'])
+      accounts['activeProducts'].each do |account|
+        response = get_account(account['accountNumber'])
         @accounts << Squeegee::Account.new(response)
       end
     end
 
     def get_account(id)
       response = {}
-      url = "#{Squeegee::BritishGas::ACCOUNT_URL}?accountnumber=#{id}"
+      url = "#{Squeegee::BritishGas::ACCOUNT_URL}?accountNumber=#{id}"
       page = get(url)
-      table = page.search("div#divHistoryTable table tbody")
+      table = page.search("table.table-history tbody")
       rows = table.search("tr").map do |row|
         tds = row.search("td")
         _row = {
           date: Date.parse(
-            tds.first.inner_text.match(/\d{2}\s\w{3}\s\d{4}/)[0]
+            tds[0].inner_text.match(/\d{2}\s\w{3}\s\d{4}/)[0]
           ),
             type: tds[1].inner_text.match(/[A-Za-z]{2,}\s?[A-Za-z]?{2,}/)[0],
             debit: tds[2].inner_text.to_f,
@@ -78,7 +77,8 @@ module Squeegee
         end
       end
       response[:uid] = Digest::MD5.hexdigest("BritishGas#{id}")
-      response[:name] = "BritishGas (#{id.to_s[-4..-1]})"
+      response[:name] = "British Gas (#{id.to_s[-4..-1]})"
+      response[:number] = id.to_i
       response
     end
 
