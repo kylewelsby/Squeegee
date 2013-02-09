@@ -4,4 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'guard-rspec'
-gem "cane", "~> 1.1.0"
+gem "cane"
