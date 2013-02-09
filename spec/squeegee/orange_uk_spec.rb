@@ -115,6 +115,27 @@ describe Squeegee::OrangeUK do
              due_at: Date.parse('2012-05-15'))
       subject.new
     end
+
+    it "gets a negative number" do
+      mechanize.should_receive(:search).with(
+        "#eBillMainContent .eBillStandardTable"
+      ).and_return([node])
+      node.should_receive(:search).with("td").twice.and_return(
+        [
+          stub(:inner_text => "15 May 2012"),
+          {},
+          stub(:inner_text => "£-25.50")
+        ]
+      )
+      mechanize.stub(:at).with('#accountSelectorLilp').and_return({'value' => '1234'})
+      Squeegee::Account.should_receive(:new).
+        with(amount: -2550,
+             name: "Orange UK (1234)",
+             uid: "06a0a787d8267fcb1a2887dc7baf4de1",
+             :number => 1234,
+             due_at: Date.parse('2012-05-15'))
+      subject.new
+    end
   end
 
 end

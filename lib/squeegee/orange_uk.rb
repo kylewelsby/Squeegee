@@ -56,7 +56,7 @@ module Squeegee
       balance = page.search("#paymBalanceIncVAT").inner_text.gsub(/\.|,/,'').match(/\d{1,}/)
 
       due_at = Date.parse(last_bill.search("td")[0].inner_text)
-      amount = last_bill.search('td')[2].inner_text.gsub(/\.|,/,'').match(/\d{1,}/)[0].to_i
+      amount = last_bill.search('td')[2].inner_text.gsub(/\.|,/,'').match(/\-?\d{1,}/)[0].to_i
       number = page.at("#accountSelectorLilp")['value'].to_i
       #@paid = balance || balance[0].to_i >= 0
       uid = Digest::MD5.hexdigest("OrangeUK#{number}")
